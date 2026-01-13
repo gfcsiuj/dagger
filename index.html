@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DAGGER | داغر</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* تعريف الخطوط */
+
+      /* الخط الرفيع للنصوص */
+      @font-face {
+        font-family: 'Manchette Fine';
+        src: url('https://framerusercontent.com/assets/sBnoKJv6fc8HO8tSe5JEFocg1oo.woff2') format('woff2');
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      /* الخط المتوسط */
+      @font-face {
+        font-family: 'Manchette Fine';
+        src: url('https://framerusercontent.com/assets/rII7MQxyoPI67OzedUyx7FzykU.woff2') format('woff2');
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      /* الخط العريض (Bold) - يظهر كنمط الرقعة في التصميم */
+      @font-face {
+        font-family: 'Manchette Fine';
+        src: url('https://framerusercontent.com/assets/s2OgrktSxNo0yQSEOAyl83scIHw.woff2') format('woff2');
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      /* الخط السميك جداً (Black) */
+      @font-face {
+        font-family: 'Manchette Fine';
+        src: url('https://framerusercontent.com/assets/Ak31Nfm112oUTD0TEccjTAu60Vg.woff2') format('woff2');
+        font-weight: 900;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      body {
+        background-color: #050505;
+        color: #F5F5F5;
+        overflow-x: hidden;
+        font-family: 'Manchette Fine', sans-serif;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #050505;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #FFD700;
+      }
+      .stroke-text {
+        -webkit-text-stroke: 1px #FFD700;
+        color: transparent;
+      }
+      .glow-text {
+        text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+      }
+      /* Hide default cursor for custom cursor implementation */
+      .cursor-none {
+        cursor: none;
+      }
+      /* Ensure clickable elements show pointer if JS fails or on touch devices */
+      @media (pointer: coarse) {
+        .cursor-none {
+          cursor: auto;
+        }
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              dagger: {
+                yellow: '#FFD700', // Gold/Yellow
+                black: '#050505',  // Deep Black
+                gray: '#121212',
+                lightGray: '#1E1E1E',
+                white: '#F5F5F5'
+              }
+            },
+            fontFamily: {
+              cairo: ['Manchette Fine', 'sans-serif'],
+              readex: ['Manchette Fine', 'sans-serif'],
+              rakkas: ['Manchette Fine', 'serif'],
+              sans: ['Manchette Fine', 'sans-serif'],
+            },
+            animation: {
+              'marquee': 'marquee 35s linear infinite',
+              'marquee-reverse': 'marquee-reverse 35s linear infinite',
+              'spin-slow': 'spin 20s linear infinite',
+              'reverse-spin': 'spin 15s linear infinite reverse',
+            },
+            keyframes: {
+              marquee: {
+                '0%': { transform: 'translateX(0%)' },
+                '100%': { transform: 'translateX(100%)' },
+              },
+              'marquee-reverse': {
+                '0%': { transform: 'translateX(100%)' },
+                '100%': { transform: 'translateX(0%)' },
+              },
+            },
+            backgroundImage: {
+              'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "framer-motion": "https://esm.sh/framer-motion@^12.26.1"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
