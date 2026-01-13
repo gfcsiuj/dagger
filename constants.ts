@@ -1,7 +1,7 @@
 import { GraduationCap, Briefcase, Zap, Star, Layout, PenTool, Smartphone, Monitor } from 'lucide-react';
 
 export const IMAGES = {
-  PROFILE: "https://e.top4top.io/p_3665za6ix1.jpg",
+  PROFILE: "https://instagram.fosm4-3.fna.fbcdn.net/v/t51.2885-19/487910738_671943322076818_1459816507954062544_n.jpg?efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=instagram.fosm4-3.fna.fbcdn.net&_nc_cat=110&_nc_oc=Q6cZ2QHXjMsMKQ_XDhRDQw7cNYyQ8pX8qzMmk1TobV6oI1ricXpXiVkxc_b0auA608oCEFk&_nc_ohc=NCLRtfZ3MiEQ7kNvwEUmc0w&_nc_gid=uvD10qrRCqU8jwTejORTCQ&edm=AP4sbd4BAAAA&ccb=7-5&oh=00_AfpApeQA_6Ihmf-3_RwGs3HeRwjGAJYPX4liTm0OUo915g&oe=696C231B&_nc_sid=7a9f4b",
   PLACEHOLDER: "https://picsum.photos/1200/800"
 };
 
