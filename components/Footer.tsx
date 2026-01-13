@@ -9,28 +9,26 @@ const DontPressButton = () => {
     const handleClick = () => {
         if (state !== 'idle') return;
         
-        // Phase 1: Hinge drop (Swing)
         setState('hinging');
         
-        // Phase 2: Fall off after swing settles (2.5 seconds later)
         setTimeout(() => {
             setState('falling');
         }, 2500);
     };
 
     return (
-        <div className="flex justify-center mt-16 mb-8 relative z-20 h-20"> {/* Container to reserve space */}
+        <div className="flex justify-center mt-16 mb-8 relative z-20 h-20">
             <motion.button
                 onClick={handleClick}
                 disabled={state !== 'idle'}
                 className={`
-                    relative bg-dagger-yellow text-dagger-black px-8 py-3 rounded-full 
+                    relative bg-dagger-yellow text-dagger-black px-8 py-1.5 rounded-full 
                     font-cairo font-black text-lg shadow-[0_0_20px_rgba(255,215,0,0.4)]
                     flex items-center gap-4 hover:shadow-[0_0_30px_rgba(255,215,0,0.6)] 
                     transition-shadow cursor-pointer select-none
                 `}
                 style={{ 
-                    transformOrigin: '20px 50%', // The pivot point (Where the dot is)
+                    transformOrigin: '20px 50%', // نقطة الارتكاز ثابتة جهة اليسار
                 }}
                 initial={{ rotate: 0, y: 0, opacity: 1 }}
                 animate={
@@ -38,26 +36,24 @@ const DontPressButton = () => {
                     ? { rotate: 80 } 
                     : state === 'falling' 
                         ? { rotate: 100, y: 1000, opacity: 0 } 
-                        : { rotate: 0, scale: [1, 1.05, 1] }
+                        : { rotate: 0 } // تم حذف أنميشن التنفس (scale)
                 }
                 transition={
                     state === 'hinging' 
-                    ? { type: "spring", stiffness: 200, damping: 8, mass: 1.5 } // Bouncy swing physics
+                    ? { type: "spring", stiffness: 200, damping: 8, mass: 1.5 } 
                     : state === 'falling'
-                        ? { duration: 0.8, ease: "easeIn" } // Gravity fall
-                        : { repeat: Infinity, duration: 2 } // Idle pulse
+                        ? { duration: 0.8, ease: "easeIn" } 
+                        : { duration: 0 } // تم حذف التكرار اللانهائي
                 }
-                whileHover={state === 'idle' ? { scale: 1.1 } : {}}
+                whileHover={{}} // تم حذف تأثير التكبير عند التحويم
             >
-                {/* The "Nail" / Dot on the left */}
-                <div className="w-3 h-3 bg-dagger-black rounded-full shadow-inner relative z-10">
+                {/* النص أولاً */}
+                <span>لا تضغطني</span>
+
+                {/* النقطة (المسمار) أصبحت الآن في الجهة المعاكسة (اليمين) */}
+                <div className="w-2.5 h-2.5 bg-dagger-black rounded-full shadow-inner relative z-10">
                     <div className="absolute top-[1px] left-[1px] w-1 h-1 bg-white/30 rounded-full"></div>
                 </div>
-
-                <span>لا تضغطني</span>
-                
-                {/* Warning Icon (Optional subtle detail) */}
-                <span className="text-xl">⚠️</span>
 
             </motion.button>
         </div>

@@ -87,7 +87,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-dagger-black pt-40 pb-20">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-dagger-black pt-32 pb-20 md:pt-40">
       
       {/* Background Ambience */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -95,14 +95,14 @@ const Hero: React.FC = () => {
         <div className="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] bg-dagger-yellow/5 blur-[150px] rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 w-full z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div className="max-w-7xl mx-auto px-6 w-full z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         
-        {/* Text Content */}
+        {/* Text Content - Order 1 on Mobile, Order 1 on Desktop (Consistent Logic: Text First is better for mobile UX) */}
         <motion.div 
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="order-2 lg:order-1 text-center lg:text-right flex flex-col gap-6"
+          className="order-1 text-center lg:text-right flex flex-col gap-6"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-dagger-lightGray border border-dagger-gray w-fit mx-auto lg:mx-0">
             <span className="relative flex h-3 w-3">
@@ -112,7 +112,7 @@ const Hero: React.FC = () => {
             <span className="text-sm font-readex text-gray-300">متاح للمشاريع الجديدة</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-rakkas text-white leading-[1.1]">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-rakkas text-white leading-[1.1]">
             كل لقطة الها <br/>
             <span className="text-dagger-yellow glow-text relative inline-block">
               حكاية
@@ -122,18 +122,18 @@ const Hero: React.FC = () => {
             </span> وتفاصيل
           </h1>
           
-          <p className="text-gray-400 font-readex text-lg md:text-xl leading-relaxed max-w-2xl">
+          <p className="text-gray-400 font-readex text-lg md:text-xl leading-relaxed max-w-2xl mx-auto lg:mx-0">
             إحنا مو بس مصممين، إحنا شريك نجاحك. من أول فكرة لآخر لقطة نرتبلك كلشي بطريقة احترافية، حتى يطلع براندك بأحلى صورة ويشد الناس إلك.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-8 justify-center lg:justify-start items-center mt-8">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start items-center mt-4 md:mt-8">
             
-            {/* Primary Button - New Premium Style */}
-            <PremiumButton text="ابدا مشروعك" href="#packages" icon={true} />
+            {/* Primary Button */}
+            <PremiumButton text="ابدا مشروعك" href="#packages" icon={true} className="w-full sm:w-auto" />
 
-            {/* Secondary Button - Glass Pill Style */}
-            <a href="#work" className="group relative px-10 py-4 rounded-full bg-white/5 backdrop-blur-md border border-white/20 text-white font-cairo font-bold text-lg overflow-hidden transition-all duration-300 hover:border-dagger-yellow/50 hover:bg-white/10 hover:shadow-[0_0_25px_rgba(255,215,0,0.1)]">
-               <span className="relative z-10 flex items-center gap-3">
+            {/* Secondary Button */}
+            <a href="#work" className="w-full sm:w-auto text-center group relative px-10 py-4 rounded-full bg-white/5 backdrop-blur-md border border-white/20 text-white font-cairo font-bold text-lg overflow-hidden transition-all duration-300 hover:border-dagger-yellow/50 hover:bg-white/10 hover:shadow-[0_0_25px_rgba(255,215,0,0.1)]">
+               <span className="relative z-10 flex items-center justify-center gap-3">
                 شاهد أعمالي
                 <span className="w-2 h-2 rounded-full bg-white/50 group-hover:bg-dagger-yellow transition-colors"></span>
                </span>
@@ -142,22 +142,19 @@ const Hero: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* IMAGE SECTION WITH MERCURY EFFECT */}
+        {/* IMAGE SECTION - Order 2 on Mobile */}
         <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="order-1 lg:order-2 flex justify-center relative"
+          className="order-2 flex justify-center relative mt-4 lg:mt-0"
         >
           <div 
-            className="relative w-[350px] h-[450px] md:w-[450px] md:h-[550px] group"
+            className="relative w-full max-w-[320px] aspect-[3/4] md:max-w-[450px] group"
             ref={containerRef}
             onMouseMove={handleMouseMove}
-            onMouseLeave={() => {
-                // Optional: Center the blobs when leaving if desired, or let them stay
-            }}
           >
-            {/* SVG Filter Definition for the "Gooey/Liquid" Effect */}
+            {/* SVG Filter Definition */}
             <svg style={{ position: 'absolute', width: 0, height: 0 }}>
               <filter id="goo">
                 <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur" />
@@ -166,53 +163,52 @@ const Hero: React.FC = () => {
               </filter>
             </svg>
 
-            {/* Background Text */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[150px] font-black text-dagger-gray/20 font-rakkas whitespace-nowrap rotate-90 md:rotate-0 select-none z-0">
+            {/* Background Text Mobile Adjustment: Hidden on tiny screens, visible on md */}
+            <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[150px] font-black text-dagger-gray/20 font-rakkas whitespace-nowrap select-none z-0">
               DAGGER
             </div>
 
             {/* Main Image Container */}
             <div 
-              className="absolute inset-0 z-20 overflow-hidden bg-dagger-black"
-              style={{ clipPath: 'polygon(20% 0%, 100% 0, 100% 80%, 80% 100%, 0 100%, 0% 20%)' }}
+              className="absolute inset-0 z-20 overflow-hidden bg-dagger-black shadow-2xl rounded-3xl md:rounded-none"
+              style={{ clipPath: 'polygon(15% 0%, 100% 0, 100% 85%, 85% 100%, 0 100%, 0% 15%)' }}
             >
-              {/* 1. Base Layer: Full Color Image */}
+              {/* 1. Base Layer */}
               <img 
                 src={IMAGES.PROFILE} 
                 alt="DAGGER Color" 
                 className="absolute inset-0 w-full h-full object-cover z-10 pointer-events-none"
               />
 
-              {/* 2. Mercury Liquid Layer (Mix Blend Mode Effect) */}
+              {/* 2. Mercury Liquid Layer */}
               <div 
                 className="absolute inset-0 z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 style={{ 
                     filter: 'url(#goo)', 
-                    mixBlendMode: 'saturation' // Removes color where the blobs are
+                    mixBlendMode: 'saturation' 
                 }}
               >
-                 {/* Generate multiple blobs for splitting/merging effect */}
-                 {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+                 {[0, 1, 2, 3, 4, 5].map((i) => (
                     <MercuryBlob key={i} index={i} mouseX={x} mouseY={y} />
                  ))}
               </div>
             </div>
 
-            {/* Badges */}
+            {/* Badges - Adjusted for mobile position */}
             <motion.div 
-              animate={{ y: [0, -10, 0] }}
+              animate={{ y: [0, -8, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -top-6 -right-6 z-30 bg-dagger-yellow text-dagger-black p-4 font-bold font-cairo shadow-lg"
-              style={{ clipPath: 'polygon(15% 0%, 100% 0, 100% 85%, 85% 100%, 0 100%, 0% 15%)' }}
+              className="absolute -top-4 -right-4 md:-top-6 md:-right-6 z-30 bg-dagger-yellow text-dagger-black px-4 py-2 md:p-4 text-sm md:text-base font-bold font-cairo shadow-lg"
+              style={{ clipPath: 'polygon(10% 0%, 100% 0, 100% 85%, 85% 100%, 0 100%, 0% 10%)' }}
             >
               7+ سنوات خبرة
             </motion.div>
 
              <motion.div 
-              animate={{ y: [0, 10, 0] }}
+              animate={{ y: [0, 8, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -bottom-6 -left-6 z-30 bg-dagger-black border border-dagger-gray text-white p-4 font-bold font-cairo shadow-lg flex items-center gap-2"
-              style={{ clipPath: 'polygon(15% 0%, 100% 0, 100% 85%, 85% 100%, 0 100%, 0% 15%)' }}
+              className="absolute -bottom-4 -left-4 md:-bottom-6 md:-left-6 z-30 bg-dagger-black border border-dagger-gray text-white px-4 py-2 md:p-4 text-sm md:text-base font-bold font-cairo shadow-lg flex items-center gap-2"
+              style={{ clipPath: 'polygon(10% 0%, 100% 0, 100% 85%, 85% 100%, 0 100%, 0% 10%)' }}
             >
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               متاح للعمل

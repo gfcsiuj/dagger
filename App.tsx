@@ -11,7 +11,7 @@ import GlassEdges from './components/GlassEdges';
 
 const App: React.FC = () => {
   return (
-    <div className="bg-dagger-black min-h-screen text-white selection:bg-dagger-yellow selection:text-dagger-black font-readex cursor-none">
+    <div className="bg-dagger-black min-h-screen text-white selection:bg-dagger-yellow selection:text-dagger-black font-readex cursor-none pb-24 md:pb-0">
       <CustomCursor />
       <GlassEdges />
       <Navbar />

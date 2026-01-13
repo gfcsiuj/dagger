@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Home, Briefcase, Sparkles, Mail, User } from 'lucide-react';
 import { NAV_LINKS } from '../constants';
 import { AnimatePresence, motion } from 'framer-motion';
 import PremiumButton from './PremiumButton';
 
 const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeTab, setActiveTab] = useState(NAV_LINKS[0].href);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,24 +16,35 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Map icons to links
+  const getIcon = (href: string) => {
+    switch (href) {
+      case '#hero': return <Home size={22} />;
+      case '#work': return <Briefcase size={22} />;
+      case '#services': return <Sparkles size={22} />;
+      case '#contact': return <Mail size={22} />;
+      default: return <User size={22} />;
+    }
+  };
+
   return (
     <>
-      <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
+      {/* --- Desktop Navbar (Top) --- */}
+      <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 hidden md:flex">
         <motion.nav 
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
           className={`
             relative flex items-center justify-between px-6 py-3 rounded-full transition-all duration-300
-            ${scrolled || isOpen ? 'bg-dagger-gray/80 backdrop-blur-xl border border-white/10 w-full max-w-5xl shadow-2xl' : 'bg-transparent w-full max-w-7xl border border-transparent'}
+            ${scrolled ? 'bg-dagger-gray/80 backdrop-blur-xl border border-white/10 w-full max-w-5xl shadow-2xl' : 'bg-transparent w-full max-w-7xl border border-transparent'}
           `}
         >
           <a href="#" className="text-2xl font-rakkas text-dagger-yellow tracking-tighter z-50 relative">
             DAGGER
           </a>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-8 bg-black/20 px-6 py-2 rounded-full border border-white/5 backdrop-blur-sm">
+          <div className="flex items-center gap-8 bg-black/20 px-6 py-2 rounded-full border border-white/5 backdrop-blur-sm">
             {NAV_LINKS.map((link) => (
               <a 
                 key={link.name} 
@@ -46,43 +57,68 @@ const Navbar: React.FC = () => {
             ))}
           </div>
 
-          <div className="hidden md:block">
+          <div>
             <PremiumButton text="أبدأ مشروعك" href="#contact" />
           </div>
-
-          {/* Mobile Menu Button */}
-          <button 
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-dagger-yellow z-50 relative"
-          >
-            {isOpen ? <X size={28} /> : <Menu size={28} />}
-          </button>
         </motion.nav>
       </div>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="fixed inset-4 z-40 bg-dagger-black/95 backdrop-blur-xl border border-white/10 rounded-[2rem] md:hidden flex flex-col justify-center items-center gap-8"
-          >
-            {NAV_LINKS.map((link) => (
-              <a 
-                key={link.name} 
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className="text-white font-rakkas text-3xl hover:text-dagger-yellow transition-colors"
-              >
-                {link.name}
-              </a>
-            ))}
-            <PremiumButton text="تواصل معنا" href="#contact" />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* --- Mobile Top Bar (Logo Only) --- */}
+      <div className="fixed top-0 left-0 right-0 z-40 p-6 flex justify-center md:hidden pointer-events-none mix-blend-difference">
+         <a href="#" className="text-3xl font-rakkas text-dagger-yellow tracking-tighter pointer-events-auto drop-shadow-lg">
+            DAGGER
+          </a>
+      </div>
+
+      {/* --- Mobile Bottom Floating Tab Bar --- */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 p-4 md:hidden">
+        <motion.nav
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5, type: 'spring', stiffness: 200, damping: 20 }}
+          className="bg-dagger-gray/90 backdrop-blur-2xl border border-white/10 rounded-[2rem] shadow-[0_10px_40px_-10px_rgba(0,0,0,0.8)] h-[72px] flex items-center justify-around px-2 relative overflow-hidden"
+        >
+            {/* Glossy Reflection */}
+            <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/5 to-transparent pointer-events-none"></div>
+
+            {NAV_LINKS.map((link) => {
+              const isActive = activeTab === link.href;
+              return (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setActiveTab(link.href)}
+                  className="relative z-10 flex flex-col items-center justify-center w-full h-full"
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="mobile-tab-active"
+                      className="absolute inset-0 bg-white/5 mx-2 my-2 rounded-2xl border border-white/5 shadow-[inset_0_0_10px_rgba(255,215,0,0.1)]"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                  
+                  <motion.div
+                    animate={isActive ? { scale: 1.1, y: -2 } : { scale: 1, y: 0 }}
+                    className={`relative z-20 ${isActive ? 'text-dagger-yellow drop-shadow-[0_0_8px_rgba(255,215,0,0.6)]' : 'text-gray-400'}`}
+                  >
+                    {getIcon(link.href)}
+                  </motion.div>
+                  
+                  {isActive && (
+                    <motion.span
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="text-[10px] font-bold mt-1 text-white font-readex"
+                    >
+                        {link.name}
+                    </motion.span>
+                  )}
+                </a>
+              );
+            })}
+        </motion.nav>
+      </div>
     </>
   );
 };
