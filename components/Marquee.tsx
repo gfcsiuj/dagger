@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
 import { MARQUEE_TEXT } from '../constants';
 
-const MercuryBlob = ({ mouseX, mouseY, index }: { mouseX: any, mouseY: any, index: number }) => {
+const MercuryBlob: React.FC<{ mouseX: any, mouseY: any, index: number }> = ({ mouseX, mouseY, index }) => {
   const stiffness = 150 - (index * 15);
   const damping = 20 + (index * 2);
   

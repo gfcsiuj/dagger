@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Home, Briefcase, Sparkles, Mail, User } from 'lucide-react';
+import { Home, Briefcase, Sparkles, Mail, User, List } from 'lucide-react';
 import { NAV_LINKS } from '../constants';
 import { AnimatePresence, motion } from 'framer-motion';
 import PremiumButton from './PremiumButton';
@@ -22,6 +22,7 @@ const Navbar: React.FC = () => {
       case '#hero': return <Home size={24} strokeWidth={1.5} />;
       case '#work': return <Briefcase size={24} strokeWidth={1.5} />;
       case '#services': return <Sparkles size={24} strokeWidth={1.5} />;
+      case '#workflow': return <List size={24} strokeWidth={1.5} />; // Icon for Workflow
       case '#contact': return <Mail size={24} strokeWidth={1.5} />;
       default: return <User size={24} strokeWidth={1.5} />;
     }
@@ -91,8 +92,13 @@ const Navbar: React.FC = () => {
         >
             {/* The Liquid Background Filter (Optional enhancement via CSS in index.html, handled here by smooth motion) */}
             
-            <div className="flex w-full justify-between items-center relative z-20 px-2">
+            <div className="flex w-full justify-between items-center relative z-20 px-2 overflow-x-auto no-scrollbar">
               {NAV_LINKS.map((link) => {
+                 // For mobile dock, let's limit items if too many, or just scroll. 
+                 // We will render all but ensure styling handles it.
+                 // If there are more than 5, we might need adjustments, but horizontal flex works.
+                 if(link.name === "باقاتنا") return null; // Hide "Packages" on mobile dock to save space if needed, or keep it. Let's keep distinct icons.
+                 
                 const isActive = activeTab === link.href;
                 
                 return (
@@ -100,7 +106,7 @@ const Navbar: React.FC = () => {
                     key={link.name}
                     href={link.href}
                     onClick={() => setActiveTab(link.href)}
-                    className="relative flex flex-col items-center justify-center w-14 h-14"
+                    className="relative flex flex-col items-center justify-center min-w-[3.5rem] h-14"
                   >
                     {isActive && (
                       <motion.div
@@ -132,7 +138,7 @@ const Navbar: React.FC = () => {
                                 initial={{ opacity: 0, y: 10, scale: 0.5 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, y: 5, scale: 0.5, transition: { duration: 0.1 } }}
-                                className="absolute -bottom-1 text-[9px] font-bold text-white font-readex"
+                                className="absolute -bottom-1 text-[9px] font-bold text-white font-readex whitespace-nowrap"
                             >
                                 {link.name}
                             </motion.span>

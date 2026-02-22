@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { SERVICES, STATS } from '../constants';
 import { ArrowUpLeft } from 'lucide-react';
 import PremiumButton from './PremiumButton';
@@ -8,40 +8,71 @@ import PremiumButton from './PremiumButton';
 
 const SpotlightCard: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = "" }) => {
   const divRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [opacity, setOpacity] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // 3D Tilt Logic
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [7, -7]), { stiffness: 150, damping: 20 });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-7, 7]), { stiffness: 150, damping: 20 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!divRef.current) return;
     const rect = divRef.current.getBoundingClientRect();
-    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    
+    // Spotlight position (pixels)
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    // Tilt position (normalized -0.5 to 0.5 center)
+    const width = rect.width;
+    const height = rect.height;
+    const normalizedX = (x / width) - 0.5;
+    const normalizedY = (y / height) - 0.5;
+
+    mouseX.set(normalizedX);
+    mouseY.set(normalizedY);
+    
+    // Update spotlight custom property for CSS if needed, or stick to overlay method
+    divRef.current.style.setProperty('--mouse-x', `${x}px`);
+    divRef.current.style.setProperty('--mouse-y', `${y}px`);
   };
 
-  const handleMouseEnter = () => setOpacity(1);
-  const handleMouseLeave = () => setOpacity(0);
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => {
+      setIsHovered(false);
+      mouseX.set(0);
+      mouseY.set(0);
+  };
 
   return (
-    <div
+    <motion.div
       ref={divRef}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`relative overflow-hidden ${className}`}
+      style={{
+          perspective: 1000,
+          rotateX: isHovered ? rotateX : 0,
+          rotateY: isHovered ? rotateY : 0,
+      }}
+      className={`relative overflow-hidden transition-all duration-200 ${className}`}
     >
+      {/* Spotlight Overlay */}
       <div
         className="pointer-events-none absolute -inset-px opacity-0 transition duration-300 z-10"
         style={{
-          opacity,
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(255,215,0,0.1), transparent 40%)`,
+          opacity: isHovered ? 1 : 0,
+          background: `radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,215,0,0.1), transparent 40%)`,
         }}
       />
       {children}
-    </div>
+    </motion.div>
   );
 };
 
 // Mercury Blob for the Yellow Card
-const MercuryBlob = ({ mouseX, mouseY, index }: { mouseX: any, mouseY: any, index: number }) => {
+const MercuryBlob: React.FC<{ mouseX: any, mouseY: any, index: number }> = ({ mouseX, mouseY, index }) => {
     const stiffness = 120 - (index * 15);
     const damping = 20 + (index * 2);
     
@@ -112,14 +143,11 @@ const BentoGrid: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
           {/* Main Large Card */}
-          <motion.div 
-            whileHover={{ y: -5 }}
-            className="md:col-span-2 rounded-[2rem] border border-dagger-gray group h-full"
-          >
-            <SpotlightCard className="bg-dagger-lightGray h-full p-8 md:p-12 rounded-[2rem]">
+          <div className="md:col-span-2 h-full">
+            <SpotlightCard className="bg-dagger-lightGray h-full p-8 md:p-12 rounded-[2rem] border border-dagger-gray group">
                 <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-dagger-yellow/5 via-transparent to-transparent"></div>
                 
-                <div className="relative z-20">
+                <div className="relative z-20 pointer-events-none">
                     <div className="w-12 h-12 rounded-full bg-dagger-yellow/10 flex items-center justify-center mb-6 text-dagger-yellow">
                         <ArrowUpLeft size={24} />
                     </div>
@@ -140,12 +168,12 @@ const BentoGrid: React.FC = () => {
                     </div>
                 </div>
             </SpotlightCard>
-          </motion.div>
+          </div>
 
           {/* Vertical CTA Card (Yellow Card with Mercury Effect) */}
-          <motion.div 
-            whileHover={{ y: -5 }}
-            className="rounded-[2rem] relative overflow-hidden group min-h-[400px] border border-dagger-yellow"
+          <motion.div
+            whileHover={{ y: -5, scale: 1.02 }}
+            className="rounded-[2rem] relative overflow-hidden group min-h-[400px] border border-dagger-yellow shadow-[0_0_30px_rgba(255,215,0,0.1)]"
             ref={cardRef}
             onMouseMove={handleCardMouseMove}
             onMouseLeave={handleCardMouseLeave}
@@ -156,7 +184,7 @@ const BentoGrid: React.FC = () => {
                     <svg width="300" height="300" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 8.5l-2.5 1.25L12 11zm0 2.5l-5-2.5-5 2.5L12 22l10-8.5-5-2.5-5 2.5z"/></svg>
                 </div>
                 
-                <div className="relative z-20">
+                <div className="relative z-20 pointer-events-none">
                     <h3 className="text-3xl font-rakkas text-dagger-black mb-4">تصميم 3D</h3>
                     <p className="text-dagger-black/80 font-cairo font-bold text-2xl leading-snug">
                         مشاهد سينمائية واقعية تبرز منتجك بطريقة لا مثيل لها بالسوق.
@@ -188,15 +216,14 @@ const BentoGrid: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -5 }}
-              className="rounded-[2rem] border border-dagger-gray group h-full"
+              className="h-full"
             >
-              <SpotlightCard className="bg-dagger-lightGray p-8 rounded-[2rem] h-full">
-                <div className="w-14 h-14 bg-dagger-black rounded-2xl flex items-center justify-center mb-6 text-dagger-yellow group-hover:scale-110 transition-transform border border-dagger-gray relative z-20">
+              <SpotlightCard className="bg-dagger-lightGray p-8 rounded-[2rem] h-full border border-dagger-gray group">
+                <div className="w-14 h-14 bg-dagger-black rounded-2xl flex items-center justify-center mb-6 text-dagger-yellow group-hover:scale-110 transition-transform border border-dagger-gray relative z-20 pointer-events-none shadow-lg">
                     <service.icon size={28} />
                 </div>
-                <h4 className="text-2xl font-cairo font-bold text-white mb-3 relative z-20">{service.title}</h4>
-                <p className="text-gray-400 font-readex text-xl leading-relaxed relative z-20">{service.description}</p>
+                <h4 className="text-2xl font-cairo font-bold text-white mb-3 relative z-20 pointer-events-none">{service.title}</h4>
+                <p className="text-gray-400 font-readex text-xl leading-relaxed relative z-20 pointer-events-none">{service.description}</p>
               </SpotlightCard>
             </motion.div>
           ))}

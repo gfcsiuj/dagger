@@ -9,7 +9,7 @@ const ATTRACTION_POINTS = [
   { x: 20, y: 80 }, { x: 50, y: 80 }, { x: 80, y: 80 }
 ];
 
-const MercuryBlob = ({ mouseX, mouseY, index }: { mouseX: any, mouseY: any, index: number }) => {
+const MercuryBlob: React.FC<{ mouseX: any, mouseY: any, index: number }> = ({ mouseX, mouseY, index }) => {
   const stiffness = 120 - (index * 10);
   const damping = 15 + (index * 3);
   
@@ -83,7 +83,7 @@ const Hero: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 w-full z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
         
         {/* Text Content */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -124,7 +124,7 @@ const Hero: React.FC = () => {
         </motion.div>
 
         {/* IMAGE SECTION */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -171,7 +171,7 @@ const Hero: React.FC = () => {
             </div>
 
             {/* Badges - Optimized for Mobile */}
-            <motion.div 
+            <motion.div
               animate={{ y: [0, -6, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               className="absolute -top-3 -right-2 md:-top-6 md:-right-6 z-30 bg-dagger-yellow text-dagger-black px-3 py-1.5 md:p-4 text-xs md:text-base font-bold font-cairo shadow-lg rounded-lg md:rounded-none"
@@ -180,7 +180,7 @@ const Hero: React.FC = () => {
               7+ سنوات خبرة
             </motion.div>
 
-             <motion.div 
+             <motion.div
               animate={{ y: [0, 6, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               className="absolute -bottom-3 -left-2 md:-bottom-6 md:-left-6 z-30 bg-dagger-black border border-dagger-gray text-white px-3 py-1.5 md:p-4 text-xs md:text-base font-bold font-cairo shadow-lg flex items-center gap-2 rounded-lg md:rounded-none"

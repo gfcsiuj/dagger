@@ -15,7 +15,7 @@ const ATTRACTION_POINTS = [
   { x: 20, y: 80 }, { x: 50, y: 80 }, { x: 80, y: 80 }
 ];
 
-const MercuryBlob = ({ mouseX, mouseY, index }: { mouseX: any, mouseY: any, index: number }) => {
+const MercuryBlob: React.FC<{ mouseX: any, mouseY: any, index: number }> = ({ mouseX, mouseY, index }) => {
   // EXTREME PHYSICS VARIATION
   // Low index = Fast, snaps to magnet (The "Head")
   // High index = Slow, lazy, heavy (The "Tail")
@@ -45,7 +45,7 @@ const MercuryBlob = ({ mouseX, mouseY, index }: { mouseX: any, mouseY: any, inde
   );
 };
 
-const MagneticImage = ({ work, index }: { work: any, index: number }) => {
+const MagneticImage: React.FC<{ work: any, index: number }> = ({ work, index }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(-200);
   const y = useMotionValue(-200);

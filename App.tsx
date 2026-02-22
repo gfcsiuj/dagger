@@ -1,28 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Marquee from './components/Marquee';
 import BentoGrid from './components/BentoGrid';
+import Workflow from './components/Workflow';
 import Pricing from './components/Pricing';
 import Gallery from './components/Gallery';
+import Testimonials from './components/Testimonials';
+import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import CustomCursor from './components/CustomCursor';
 import GlassEdges from './components/GlassEdges';
+import Preloader from './components/Preloader';
+import { AnimatePresence } from 'framer-motion';
+
+const NoiseOverlay = () => {
+  return (
+    <div className="noise-bg noise-animation"></div>
+  );
+};
 
 const App: React.FC = () => {
+  const [loading, setLoading] = useState(true);
+
   return (
     <div className="bg-dagger-black min-h-screen text-white selection:bg-dagger-yellow selection:text-dagger-black font-readex cursor-none pb-24 md:pb-0">
       <CustomCursor />
-      <GlassEdges />
-      <Navbar />
-      <main>
-        <Hero />
-        <Marquee />
-        <BentoGrid />
-        <Pricing />
-        <Gallery />
-      </main>
-      <Footer />
+      
+      <AnimatePresence mode="wait">
+        {loading && <Preloader onComplete={() => setLoading(false)} />}
+      </AnimatePresence>
+
+      {!loading && (
+        <>
+            <NoiseOverlay />
+            <GlassEdges />
+            <Navbar />
+            <main>
+                <Hero />
+                <Marquee />
+                <BentoGrid />
+                <Workflow />
+                <Gallery />
+                <Testimonials />
+                <Pricing />
+                <FAQ />
+            </main>
+            <Footer />
+        </>
+      )}
     </div>
   );
 };
