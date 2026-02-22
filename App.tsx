@@ -8,6 +8,7 @@ import Pricing from './components/Pricing';
 import Gallery from './components/Gallery';
 import Testimonials from './components/Testimonials';
 import FAQ from './components/FAQ';
+import MercurySection from './components/MercurySection';
 import Footer from './components/Footer';
 import CustomCursor from './components/CustomCursor';
 import GlassEdges from './components/GlassEdges';
@@ -45,6 +46,7 @@ const App: React.FC = () => {
                 <Testimonials />
                 <Pricing />
                 <FAQ />
+                <MercurySection />
             </main>
             <Footer />
         </>
